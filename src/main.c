@@ -129,6 +129,10 @@
 #include "win32screen.h"
 #endif
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#endif
+
 
 #if defined (WIN32) && (defined(USE_SDL) || defined(USE_SDL2))
   // On Windows, SDL_putenv is not present in any compilable header.
@@ -1279,6 +1283,13 @@ void Program_shutdown(void)
 
 }
 
+#if defined(__EMSCRIPTEN__)
+struct Args {
+  int argc;
+  char** argv;
+};
+void em_main_loop(void* args);
+#endif
 
 /**
  * Program entry point
@@ -1370,6 +1381,15 @@ int main(int argc,char * argv[])
 
   // TODO : nCmdShow indicates if the window must be maximized, etc.
 #endif
+
+#if defined(__EMSCRIPTEN__)
+  struct Args args = {
+    .argc = argc,
+    .argv = argv
+  };
+  emscripten_set_main_loop_arg(em_main_loop, (void*)&args, 0, 1);
+
+#else
   if(!Init_program(argc,argv))
   {
     Program_shutdown();
@@ -1382,8 +1402,35 @@ int main(int argc,char * argv[])
   Main_handler();
 
   Program_shutdown();
+#endif
+
   return 0;
 }
+
+#if defined(__EMSCRIPTEN__)
+void em_main_loop(void* args) {
+  static int initialized = 0;
+
+  struct Args* args_ = (struct Args*) args;
+  if (! initialized) {
+    if(! Init_program(args_->argc,args_->argv))
+    {
+      Program_shutdown();
+      // cancel main loop
+      return;
+    }
+    initialized = 1;
+  }
+
+  if (! Quitting) {
+    Main_handler();
+
+  } else {
+    Program_shutdown();
+    // cancel main loop
+  }
+}
+#endif
 
 #if defined(WIN32) && !defined(USE_SDL) && !defined(USE_SDL2) && !defined(_MSC_VER)
 /**

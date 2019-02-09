@@ -49,7 +49,9 @@ extern void GFX2_LogV(GFX2_Log_priority_T priority, const char * fmt, va_list ap
   if ((unsigned)GFX2_verbosity_level < (unsigned)priority)
     return;
 #endif
-#if defined(USE_SDL2)
+#if defined(__EMSCRIPTEN__) || !defined(USE_SDL2)
+  vfprintf((unsigned)priority >= GFX2_INFO ? stdout : stderr, fmt, ap);
+#else
   {
     int sdl_priority;
     switch(priority)
@@ -71,8 +73,6 @@ extern void GFX2_LogV(GFX2_Log_priority_T priority, const char * fmt, va_list ap
     }
     SDL_LogMessageV(SDL_LOG_CATEGORY_APPLICATION, sdl_priority, fmt, ap);
   }
-#else
-  vfprintf((unsigned)priority >= GFX2_INFO ? stdout : stderr, fmt, ap);
 #endif
 #if defined(_MSC_VER) && defined(_DEBUG)
   {

@@ -36,6 +36,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <strings.h>
 
 #if !defined(__VBCC__) && !defined(_MSC_VER)
     #include <unistd.h>

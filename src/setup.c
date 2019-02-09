@@ -145,7 +145,8 @@ void Set_data_directory(const char * program_dir, char * data_dir)
       // If the program is not installed, find_path will fail. Try from local dir then.
       strcat(data_dir,"../share/grafx2/");
     }
-
+  #elif defined(__EMSCRIPTEN__)
+    strcat(data_dir,"/share/grafx2/");
   // All other targets, program is in a "bin" subdirectory
   #else
     strcat(data_dir,"../share/grafx2/");

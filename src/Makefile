@@ -782,6 +782,13 @@ FONT_FILES = $(addprefix ../share/grafx2/fonts/,$(FONTS))
 DOC_FILES = $(wildcard ../doc/*.txt)
 DOC_FILESRTF = ../doc/quickstart.rtf
 
+ifdef EMSCRIPTEN
+# Currently this assumes that the share directory and the gfx2def.ini file are
+# copied under src which becomes the root of the preloaded target filesystem.
+  COPT += -g4 -s USE_LIBPNG=1 -s USE_ZLIB=1 -s USE_FREETYPE=1 -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s USE_SDL_TTF=2 -s USE_SDL_GFX=2 -I /usr/local/include
+  LOPT += -g4 -s USE_LIBPNG=1 -s USE_ZLIB=1 -s USE_FREETYPE=1 -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s USE_SDL_TTF=2 -s USE_SDL_GFX=2 -s NO_EXIT_RUNTIME=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0 --preload-file share --preload-file gfx2def.ini
+  BIN = ../bin/grafx2.html
+endif
 
 ifeq ($(PLATFORM),Darwin)
 all : $(MACAPPEXE)
