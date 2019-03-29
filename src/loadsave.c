@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #ifndef _MSC_VER
 #include <unistd.h>
 #endif
@@ -1239,6 +1240,7 @@ T_GFX2_Surface * Load_surface(char *full_name, T_Gradient_array *gradients)
 
 static void Load_ClipBoard_Image(T_IO_Context * context)
 {
+  (void)context;
 #ifdef WIN32
   UINT format;
   HANDLE clipboard;
@@ -1527,6 +1529,7 @@ static void Load_ClipBoard_Image(T_IO_Context * context)
 
 static void Save_ClipBoard_Image(T_IO_Context * context)
 {
+  (void)context;
 #ifdef WIN32
   if (!OpenClipboard(GFX2_Get_Window_Handle()))
   {

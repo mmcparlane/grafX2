@@ -178,8 +178,13 @@ void Button_Message_initial(void)
 
   Display_cursor();
 
+#if defined(__EMSCRIPTEN__)
+  Get_input(20);
+#else
   while(!Mouse_K && !Key && !Quit_is_required)
     Get_input(20);
+#endif
+
   if (Mouse_K)
   {
     clicked_button = Window_get_clicked_button();

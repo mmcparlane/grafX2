@@ -662,20 +662,23 @@ void Layer_preview_off(int * preview_is_visible)
 void Main_handler(void)
 {
   static byte temp_color;
-  int  button_index;           // Numéro de bouton de menu en cours
-  int  prev_button_number=0; // Numéro de bouton de menu sur lequel on était précédemment
-  byte blink;                   // L'opération demande un effacement du curseur
-  int  key_index;           // index du tableau de touches spéciales correspondant à la touche enfoncée
-  byte temp;
-  byte effect_modified;
-  byte action;
-  dword key_pressed;
+  static int  button_index;           // Numéro de bouton de menu en cours
+  static int  prev_button_number=0; // Numéro de bouton de menu sur lequel on était précédemment
+  static byte blink;                   // L'opération demande un effacement du curseur
+  static int  key_index;           // index du tableau de touches spéciales correspondant à la touche enfoncée
+  static byte temp;
+  static byte effect_modified;
+  static byte action;
+  static dword key_pressed;
 
-  int preview_is_visible=0;
+  static int preview_is_visible=0;
   // This is used for the layer preview
 
+#ifndef __EMSCRIPTEN__
   do
   {
+#endif
+
     // Resize requested
     if (Resize_width || Resize_height)
     {
@@ -1650,8 +1653,11 @@ void Main_handler(void)
     }
     Old_MX=Mouse_X;
     Old_MY=Mouse_Y;
+
+#ifndef __EMSCRIPTEN__
   }
   while (!Quitting);
+#endif
 }
 
 
