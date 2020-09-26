@@ -28,3 +28,7 @@
 /install/*.exe
 
 .vscode/
+
+src/doc/
+src/share/
+src/gfx2def.ini
