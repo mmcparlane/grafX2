@@ -78,4 +78,4 @@ CMD ["/bin/bash", "-c", \
       cd grafx2 && \
       cp -r share src/share && \
       cp share/grafx2/gfx2def.ini src/gfx2def.ini && \
-      emmake make NOTTF=1 NOLUA=1 API=sdl2"]
+      emmake make NOTTF=1 NOLUA=1 API=sdl2 release"]
